@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState} from 'react'
+import './App.css'
 
-function App() {
+import { StateProvider } from './contexts/StateContext'
+
+import Header from './components/Header'
+import Menu from './components/Menu'
+import Body from './components/Body'
+
+const App = () => {
+  const [userName, setUsername] = useState('Miguel')
+  const [userEmail, setUserEmail] = useState('miguel@gmail.com')
+
+  let providerValue = {
+    theme: 'light',
+    user: {
+      name: userName,
+      email: userEmail
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StateProvider value={providerValue}>
+      <div className="App">
+          <Header/>
+          <section>
+            <Menu/>
+            <Body setUsername={setUsername}/>
+          </section>   
+        </div>
+    </StateProvider>
   );
 }
 
-export default App;
+export default App
