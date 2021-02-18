@@ -1,40 +1,34 @@
+import { useEffect } from 'react'
 import { createContext, useContext, useReducer } from 'react'
 
+import ThemeReducer from '../reducers/ThemeReducer'
+import UserReducer from '../reducers/UserReducer'
+
 const initialState = {
-    theme: 'light',
-    user: {
-        name: 'Miguel',
-        email: 'miguel@gmail.com'
-    }
+    theme: ThemeReducer(),
+    user: UserReducer()
 }
 
-const reducer = (state, action) => {
-    switch(action.type) {
-        case 'setTheme':
-            return {...state, theme: action.payload.theme}
-            break
-        case 'setName':
-            let newUserName = {...state.user}
-            newUserName.name = action.payload.name
+const MainReducer = (state, action) => ({
+    theme: ThemeReducer(state.theme, action),
+    user: UserReducer(state.user, action)
+})
 
-            return {...state, user: newUserName}
-            break
-        case 'setEmail':
-            let newUserEmail = {...state.user}
-            newUserEmail.name = action.payload.name
-
-            return {...state, email: newUserEmail}
-            break
-    }
-
-    return state
-}
+const localState = JSON.parse(localStorage.getItem('context'))
 
 export const StateContext = createContext()
-export const StateProvider = ({ children }) => (
-    <StateContext.Provider value={useReducer(reducer, initialState)}>
-        {children}
-    </StateContext.Provider>
-)
+export const StateProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(MainReducer, localState || initialState)
+    
+    useEffect(() => {
+        localStorage.setItem('context', JSON.stringify(state))
+    }, [state])
+
+    return (
+        <StateContext.Provider value={[state, dispatch]}>
+            {children}
+        </StateContext.Provider>
+    )
+}
 
 export const useStateValue = () => useContext(StateContext)
