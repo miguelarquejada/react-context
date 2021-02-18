@@ -1,10 +1,10 @@
 import { useStateValue } from '../contexts/StateContext'
 
 const Info = () => {
-    const context = useStateValue()
+    const [state, dispatch] = useStateValue()
 
     return (
-        <button>{context.user.name} - {context.theme}</button>
+        <button>{state.user.name} - {state.theme}</button>
     )
 }
 

@@ -1,15 +1,28 @@
-import Info from './Info'
 import { useStateValue } from '../contexts/StateContext'
 
 import Contagem from './Contagem'
 
 const Header = () => {
-    const context  = useStateValue()
+    const [state, dispatch]  = useStateValue()
+
+    const changeTheme = theme => dispatch({
+        type: 'setTheme',
+        payload: {
+            theme: theme
+        }
+    })
 
     return (
-        <div className={`theme-${context.theme}`}>
+        <div className={`theme-${state.theme}`}>
             <h1>Header</h1>
-            <Info />
+
+            {state.theme == 'light' &&
+                <button onClick={() => changeTheme('dark')}>Dark</button>
+            }
+
+            {state.theme == 'dark' &&
+                <button onClick={() => changeTheme('light')}>Light</button>
+            }
             <Contagem />
         </div>
     )

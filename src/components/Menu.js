@@ -2,10 +2,10 @@ import { useStateValue } from '../contexts/StateContext'
 import Info from './Info'
 
 const Menu = () => {
-    const context = useStateValue()
+    const [state, dispatch] = useStateValue()
 
     return (
-        <div className={`theme-${context.theme}`}>
+        <div className={`theme-${state.theme}`}>
             <h1>Menu</h1>
             <Info />
         </div>
